@@ -1,0 +1,102 @@
+# Open the file in read mode
+safeReports = 0
+badReports = 0
+maxDifference = 3
+
+allReports = []
+
+
+with open('testing notepad.txt', 'r') as file:
+    # Read the contents
+    count = 0
+    for line in file:
+            allReports.append( line.replace("\n", "").split())
+        
+        
+#print(allReports[2])
+def checkCorrectDifference(aReport):
+    currentNum = None
+    for num in aReport:
+        num = int(num)
+        if currentNum == None:
+            currentNum = num
+            continue
+        if abs(num - currentNum) <= maxDifference:
+            currentNum = num
+            continue
+        else:
+            return False
+    return True
+
+def checkIncreaseOrDecrease(aReport):
+    firstNum = None
+    secondNum = None
+    increasing = False
+    currentNum = None
+    for num in aReport:
+        num = int(num)
+        if firstNum == None:
+            firstNum = num
+            continue
+        if secondNum == None:
+            secondNum = num
+            if secondNum > firstNum:
+                increasing = True
+            else:
+                increasing = False
+            currentNum = num
+            continue
+        if increasing:
+            if num > currentNum:
+                currentNum = num
+                continue
+            else:
+                print("supposed to increase")
+                print(num > currentNum)
+                print(num)
+                print(currentNum)
+                return False
+        if not increasing:
+            if num < currentNum:
+                currentNum = num
+                continue
+            else:
+                print("supposed to decrease")
+                print(num)
+                print(currentNum)
+                return False
+    return True
+        
+
+def checkIfNoIncreases(aReport):
+    currentNum = None
+    for num in aReport:
+        if currentNum == None:
+            currentNum = num
+            continue
+        if num == currentNum:
+            return False
+        else:
+            currentNum = num
+            continue
+    return True
+
+for report in allReports:
+    print(report)
+    if checkIfNoIncreases(report) == False:
+        print("no increase")
+        badReports += 1
+        continue
+    if checkIncreaseOrDecrease(report) == False:
+        print(" changed order")
+        badReports += 1
+        continue
+    if checkCorrectDifference(report) == False:
+        print("incorrect difference")
+        badReports += 1
+        continue
+    print("correct")
+    safeReports += 1
+    
+print(safeReports)
+    
